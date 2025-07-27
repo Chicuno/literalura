@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fernandez.literalura.RespuestaConvertida;
 import com.fernandez.literalura.modelos.Autor;
-import com.fernandez.literalura.modelos.DatosAutor;
 import com.fernandez.literalura.modelos.DatosLibro;
 import com.fernandez.literalura.modelos.Libro;
 import com.fernandez.literalura.servicio.*;
@@ -100,7 +99,6 @@ public class Principal {
             }
             String terminoCodificado = URLEncoder.encode(libroBuscado, StandardCharsets.UTF_8);
             var respuestaJson = consumoApi.obtenerDatosAPI(URL_BASE + terminoCodificado);
-//            var respuestaJson = consumoApi.obtenerDatosAPI(URL_BASE + libroBuscado.replace(" ", "%20"));
             var respuestaConvertida = conversor.obtenerDatos(respuestaJson, RespuestaConvertida.class);
             var numeroDeResultados = conversor.obtenerDatos(respuestaJson, CantidadDeResultados.class);
             if (respuestaConvertida.resultados().isEmpty()) {
@@ -293,8 +291,6 @@ public class Principal {
                             nombreNormalizado = partes[1] + " " + partes[0];
                         }
                     }
-//                    var normalizarNombre = autor.getNombre().split(",\\s*");
-//                    var nombreNormalizado = normalizarNombre[1] + " " + normalizarNombre[0];
 
                     String nacimiento = autor.getFechaDeNacimiento() == 0 ? "Desconocido" : String.valueOf(autor.getFechaDeNacimiento());
                     String muerte = autor.getFechaDeMuerte() == 0 ? "Desconocido" : String.valueOf(autor.getFechaDeMuerte());
