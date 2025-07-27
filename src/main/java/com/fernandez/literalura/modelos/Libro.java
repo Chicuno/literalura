@@ -10,22 +10,24 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "libros")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String titulo;
+
     private List<String> idiomas = new ArrayList<>();
+
     private int numeroDeDescargas;
-    @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "libro_autor",
-//            joinColumns = @JoinColumn(name = "libro_id"),
-//            inverseJoinColumns = @JoinColumn(name = "autor_id")
-//    )
-    @JsonAlias("authors")
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "libro_autor",
+            joinColumns = @JoinColumn(name = "libro_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
     private List<Autor> autores = new ArrayList<>();
 
     public Libro() {
@@ -76,9 +78,8 @@ public class Libro {
 
     public void setAutores(List<Autor> autores) {
         if (autores != null) {
-            autores.forEach(a -> a.setLibro(this));
+            autores.forEach(a -> a.agregarLibro(this));
             this.autores = autores;
-
         }
     }
 

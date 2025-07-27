@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,14 +14,13 @@ public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    //@Column(unique = true)
-    @JsonAlias("name") private String nombre;
-    @JsonAlias("birth_year") private int fechaDeNacimiento;
-    @JsonAlias("death_year") private int fechaDeMuerte;
+    @Column(unique = true)
+    private String nombre;
+    private int fechaDeNacimiento;
+    private int fechaDeMuerte;
 
-    @ManyToOne
-    @JoinColumn(name = "libro_id")
-    private Libro libro;
+    @ManyToMany(mappedBy = "autores", fetch = FetchType.EAGER)
+    private List<Libro> libros = new ArrayList<>();
 
     public Autor() {}
 
@@ -39,22 +39,27 @@ public class Autor {
     public String getNombre() {return nombre;}
     public void setNombre(String nombre) {this.nombre = nombre;}
 
-    public Libro getLibro() {return libro;}
-    public void setLibro(Libro libro) {this.libro = libro;}
+    public List<Libro> getLibros() {return libros;}
+    public void setLibros(List<Libro> libros) {this.libros = libros;}
 
+    public void agregarLibro(Libro libro) {
+        if (libros == null) {
+            libros = new ArrayList<>();
+        }
+        libros.add(libro);
+    }
     public void setId(Long id) {
         Id = id;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Autor{" +
-//                "Id=" + Id +
-//                ", nombre='" + nombre + '\'' +
-//                ", fechaDeNacimiento=" + fechaDeNacimiento +
-//                ", fechaDeMuerte=" + fechaDeMuerte +
-//                ", libro=" + libro +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        var normalizarNombre = this.getNombre().split(",\\s*");
+        String nombreNormalizado = normalizarNombre[1] + " " + normalizarNombre[0];
+        return  "Autor: " + nombreNormalizado + " " +
+                "(" + fechaDeNacimiento +
+                " - " + fechaDeMuerte + ")" +
+                " Libro: " + libros.stream().map(libro -> libro.getTitulo()).toString();
+    }
 }
 
