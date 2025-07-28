@@ -364,8 +364,27 @@ public class Principal {
     private String obtenerCodigoIdioma (String idiomaBuscado){
         var idiomaBuscadoLimpio = limpiarAcentos(idiomaBuscado.trim().toLowerCase());
 
-        Map<String, String> idiomasPersonalizados = Map.of(
-                "latin", "la"
+        Map<String, String> idiomasPersonalizados = Map.ofEntries(
+                Map.entry("latín", "la"),
+                Map.entry("latin", "la"),
+                Map.entry("esperanto", "eo"),
+                Map.entry("volapük", "vo"),
+                Map.entry("volapuk", "vo"),
+                Map.entry("interlingua", "ia"),
+                Map.entry("ido", "io"),
+                Map.entry("sánscrito", "sa"),
+                Map.entry("sanscrito", "sa"),
+                Map.entry("griego antiguo", "grc"),
+                Map.entry("hebreo", "he"),
+                Map.entry("nahuatl", "nah"),
+                Map.entry("náhuatl", "nah"),
+                Map.entry("quechua", "qu"),
+                Map.entry("guaraní", "gn"),
+                Map.entry("guarani", "gn"),
+                Map.entry("asturiano", "ast"),
+                Map.entry("frisón", "fy"),
+                Map.entry("yidis", "yi"),
+                Map.entry("yiddish", "yi")
         );
 
         if (idiomasPersonalizados.containsKey(idiomaBuscadoLimpio)) {
